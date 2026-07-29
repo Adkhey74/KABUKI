@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KABUKI — restaurant japonais, Annecy
 
-## Getting Started
+Site vitrine d'un restaurant japonais. **Projet de démonstration** : les
+coordonnées, l'adresse et le téléphone affichés sont fictifs, et le formulaire de
+réservation n'envoie rien (`preventDefault`, aucune route d'envoi). À brancher sur
+une API avant toute mise en ligne réelle.
 
-First, run the development server:
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · framer-motion
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # http://localhost:3000
+npm run build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Où se trouvent les choses
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Quoi | Où |
+|---|---|
+| Tokens de design (couleurs, typo, filets) | `src/app/globals.css` — bloc `@theme` |
+| Utilitaires maison (`.container`, `.label`, `.btn-*`, `.input`, `.jp`) | `src/app/globals.css` — blocs `@utility` |
+| La carte (7 catégories, 34 plats, allergènes) | `src/data/menu.ts` |
+| Polices | `src/app/layout.tsx` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Conventions
 
-## Learn More
+- **Zéro `style={{}}`, zéro `<style>` dans le JSX.** Tout le style passe par les
+  utilitaires Tailwind et les tokens de `globals.css`. Les seules exceptions
+  tolérées sont les `background-image` d'URL distante et les dégradés `radial` /
+  `mask-image`, que Tailwind n'exprime pas.
+- **Aucune couleur en dur** dans un composant : utiliser les tokens
+  (`text-ink-muted`, `border-line-strong`, `text-gold-ink`…). Les trois niveaux de
+  texte sont opaques et tous au-dessus de 5:1 — ne pas réintroduire d'échelle
+  d'opacité pour hiérarchiser, c'est ce qui rendait la moitié du site illisible.
+- **Texte japonais** : l'envelopper dans `<span lang="ja" className="jp">` (ou
+  `jp-body` pour les micro-labels), et n'envelopper que le fragment japonais —
+  jamais toute la ligne, sinon le français bascule de police lui aussi.
+- Commentaires en français, orientés « pourquoi ».
 
-To learn more about Next.js, take a look at the following resources:
+## Note sur les polices japonaises
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`Noto_Serif_JP` et `Noto_Sans_JP` sont chargées avec `preload: false` dans
+`layout.tsx`. Ce n'est pas un réglage de performance : Google n'expose pas de
+sous-ensemble « japanese » via `next/font`, et tant que le preload est actif
+`next/font` réclame un `subsets` qui ne correspondrait à rien de ce qu'on utilise
+ici. Conséquence attendue : le **build** émet beaucoup de fichiers `.woff2`, mais
+le navigateur n'en télécharge que deux ou trois — ceux qui couvrent les kanji
+réellement affichés.
