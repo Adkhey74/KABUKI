@@ -2,22 +2,20 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import HeroVideo from "./HeroVideo";
 
 export default function Hero() {
   return (
     <section className="relative flex h-[100dvh] min-h-[600px] w-full flex-col items-center justify-center overflow-hidden">
 
-      {/* Image de fond */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=1920&q=80')" }}
-      />
+      {/* Vidéo de fond (image fixe en mouvement réduit) */}
+      <HeroVideo />
 
       {/* ── Voilage en trois couches ──────────────────────────────────────────
           L'ancien overlay était un simple dégradé vertical dont le creux (α 0.35)
           tombait pile sur le texte centré : sur une zone claire de la photo, le
-          H1 descendait à 2.7:1 et le sur-titre doré à 1.2:1. Et comme la photo
-          vient d'Unsplash, on ne maîtrise pas ce qui passe dessous.
+          H1 descendait à 2.7:1 et le sur-titre doré à 1.2:1. Et comme le fond
+          change à chaque image de la vidéo, on ne maîtrise pas ce qui passe dessous.
           On rend donc la lisibilité indépendante de l'image : voile plat à 50 %,
           puis voile radial à 80 % centré sur le bloc de texte. Il ne reste que
           10 % de l'image derrière les mots — même sur du blanc pur, le fond
@@ -33,16 +31,10 @@ export default function Hero() {
       {/* Raccord haut (derrière la navbar) et bas (vers la section About) */}
       <div className="absolute inset-0 bg-linear-to-b from-bg/85 via-transparent to-bg/95" />
 
-      {/* Filigrane décoratif — le seul élément qui justifie de charger une
-          police japonaise éditoriale. Purement ornemental, donc aria-hidden. */}
-      <span
-        aria-hidden="true"
-        lang="ja"
-        className="jp pointer-events-none absolute inset-0 flex select-none items-center justify-center text-[18vw] leading-none text-gold/[0.06]"
-      >
-        歌舞伎
-      </span>
-
+      {/* Pas de filigrane 歌舞伎 derrière le titre : retiré le 14/09/2026 à
+          la demande d'Adil. Sur la vidéo, il faisait une troisième couche entre
+          l'image et « KABUKI » et se lisait comme un titre en double. Le kanji
+          reste présent dans le sur-titre, juste au-dessus. */}
       {/* Contenu */}
       <div className="relative z-10 w-full max-w-180 px-6 text-center">
         <motion.span
